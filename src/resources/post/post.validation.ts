@@ -5,4 +5,13 @@ const create = Joi.object({
     body: Joi.string().required(),
 });
 
-export default { create };
+const get = Joi.object({
+    id: Joi.string(),
+});
+
+const getManyQuery = Joi.object({
+    title: Joi.string().optional(),
+    body: Joi.string().optional(),
+});
+
+export default { create, get, getManyQuery };

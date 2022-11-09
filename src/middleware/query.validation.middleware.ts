@@ -1,7 +1,7 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
 import Joi from 'joi';
 
-function validationMiddleware(schema: Joi.Schema): RequestHandler {
+function queryValidationMiddleware(schema: Joi.Schema): RequestHandler {
     return async (
         req: Request,
         res: Response,
@@ -9,12 +9,14 @@ function validationMiddleware(schema: Joi.Schema): RequestHandler {
     ): Promise<void> => {
         const validationOptions = {
             abortEarly: false,
-            allowUnknown: true,
-            stripUnknown: true,
+            allowUnknown: false,
         };
 
         try {
-            req.body = await schema.validateAsync(req.body, validationOptions);
+            req.query = await schema.validateAsync(
+                req.query,
+                validationOptions
+            );
             next();
         } catch (e) {
             if (e instanceof Joi.ValidationError) {
@@ -31,4 +33,4 @@ function validationMiddleware(schema: Joi.Schema): RequestHandler {
     };
 }
 
-export default validationMiddleware;
+export default queryValidationMiddleware;
